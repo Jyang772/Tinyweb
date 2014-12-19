@@ -307,7 +307,7 @@ int main(int argc, char **argv)
 
   free(get);
   free(remote);
-  free(ip);
+  //free(ip);
   close(sock);
   return 0;
 }
@@ -333,21 +333,39 @@ int create_tcp_socket()
 
 char *get_ip(char *host)
 {
-  struct hostent *hent;
-  int iplen = 15; //XXX.XXX.XXX.XXX
-  char *ip = (char *)malloc(iplen+1);
-  memset(ip, 0, iplen+1);
-  if((hent = gethostbyname(host)) == NULL)
-  {
-    herror("Can't get IP");
-    exit(1);
-  }
-  if(inet_ntop(AF_INET, (void *)hent->h_addr_list[0], ip, iplen) == NULL)
-  {
-    perror("Can't resolve host");
-    exit(1);
-  }
-  return ip;
+//  struct hostent *hent;
+//  int iplen = 15; //XXX.XXX.XXX.XXX
+//  char *ip = (char *)malloc(iplen+1);
+//  memset(ip, 0, iplen+1);
+//  if((hent = gethostbyname(host)) == NULL)
+//  {
+//    herror("Can't get IP");
+//    exit(1);
+//  }
+//  if(inet_ntop(AF_INET, (void *)hent->h_addr_list[0], ip, iplen) == NULL)
+//  {
+//    perror("Can't resolve host");
+//    exit(1);
+//  }
+//  return ip;
+
+    struct hostent *host_info;
+    struct in_addr *address;
+    int iplen = 15;
+    char *ip;// = (char *)malloc(iplen+1);
+    host_info = gethostbyname(host);
+    if(host_info == NULL){
+        printf("Could not lookup %s\n",host);
+    } else{
+        address = (struct in_addr*) host_info->h_addr;
+        //inet_ntop(AF_INET,(void*)host_info->h_addr_list[0],ip,iplen);
+    }
+    //memset(ip, 0, iplen+1);
+    ip = inet_ntoa(*address);
+    //printf("Length: %d\n",strlen(ip));
+    //printf("ip: %s\n",inet_ntoa(*address));
+    getchar();
+    return ip;
 }
 
 char *build_get_query(char *host, char *page)
