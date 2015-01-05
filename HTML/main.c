@@ -164,11 +164,13 @@ int create_tcp_socket();
 char *get_ip(char *host);
 char *build_get_query(char *host, char *page);
 void usage();
+void dump(char *buffer, int length);
 
 #define HOST "coding.debuntu.org"
 #define PAGE "/"
 #define PORT 80
 #define USERAGENT "HTMLGET 1.0"
+
 
 int main(int argc, char **argv)
 {
@@ -384,3 +386,31 @@ char *build_get_query(char *host, char *page)
   sprintf(query, tpl, getpage, host, USERAGENT);
   return query;
 }
+
+void dump(char *buffer, int length){
+
+    int i,j;
+    char byte;
+    for(i=0; i<length; i++){
+
+        if(i%16 == 0)
+            printf("%08x ",i);
+        printf("%02x ",buffer[i]);
+
+        if( (i%16==15) || (i==length-1)){
+            for(j=0;j<15-(i%16);j++)
+                printf("   ");
+            printf("| ");
+
+            for(j=(i-(i%16));j<=i;j++){
+                byte = buffer[j];
+                if(byte > 31 && byte < 127)
+                    printf("%c",byte);
+                else
+                    printf(".");
+            }
+            printf("\n");
+        }
+    }
+}
+
