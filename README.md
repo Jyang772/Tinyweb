@@ -20,3 +20,10 @@ Building the shared library.
  `gcc -shared -o libtinyweb.so tinyweb.o`
 
  `cp libtinyweb.so /usr/lib`
+
+
+References:
+
+http://crasseux.com/books/ctutorial/Building-a-library.html
+
+http://randu.org/tutorials/c/libraries.php
