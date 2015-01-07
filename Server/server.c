@@ -3,7 +3,34 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <netdb.h>
+int cmd_line(int a, int b);
+void lookup();
 
+struct commands{
+    char *command;
+    int (*cmd_handler)(int a, int b);
+};
+
+struct commands cmds[] = {
+{"USER", cmd_line},
+{"PINGU", lookup}
+
+};
+
+int cmd_line(int a, int b){
+    printf("%d and %d",a,b);
+}
+
+void lookup()
+{
+    struct hostent *host_info;
+    struct in_addr *address;
+
+    host_info = gethostbyname("www.micropenguin.net");
+    address = (struct in_addr *)(host_info->h_name);
+    printf("%s: ",inet_ntoa(*waddress));
+}
 
 int main(int argc, char *argv[]){
 
@@ -41,5 +68,6 @@ int main(int argc, char *argv[]){
     }
 
 
+    cmds[1].cmd_handler(1,2);
 
 }
