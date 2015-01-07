@@ -1,5 +1,5 @@
 //HexDump function
-
+#include <stdio.h>
 
 void dump(char *buffer, int length){
     
