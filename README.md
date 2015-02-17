@@ -1,6 +1,6 @@
 Tinyweb
 =======
 
-Functions for simple network programming
+A repo containing functions for simple network programming
 
 

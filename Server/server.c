@@ -29,43 +29,55 @@ void lookup()
 
     host_info = gethostbyname("www.micropenguin.net");
     address = (struct in_addr *)(host_info->h_name);
-    printf("%s: ",inet_ntoa(*waddress));
+    printf("%s: ",inet_ntoa(*address));
 }
 
-int main(int argc, char *argv[]){
-
-    int sockfd;
+void initialize_server(int *sockfd, int port)
+{
     struct sockaddr_in host_addr;
 
-
     //Create socket
-    if((sockfd = socket(AF_INET,SOCK_STREAM,0)) == -1)
+    if((*sockfd = socket(AF_INET,SOCK_STREAM,0)) == -1)
     {
         perror("ERROR creating socket!\n");
         exit(1);
     }
 
-    //Set up sockaddr structure for binding
-    int port = 8888;
+    //Set up struct
+    host_addr.sin_addr.s_addr = INADDR_ANY;
     host_addr.sin_family = AF_INET;
-    host_addr.sin_port = htons(port);
-    host_addr.sin_addr.s_addr = 0;
+    host_addr.sin_port = port;
 
-    //Printing w/e address is assigned.
-    printf("%s\n",inet_ntoa(host_addr.sin_addr));
-
-    if(bind(sockfd,(struct sockaddr *) &host_addr,sizeof(struct sockaddr)) == -1)
+    //bind socket
+    if(bind(*sockfd,(struct sockaddr*) &host_addr,sizeof(struct sockaddr)) == -1)
     {
-        perror("ERROR binding socket!\n");
+        perror("Failed to bind socket!\n");
         exit(1);
     }
 
-    int yes = 1;
-    if(setsockopt(sockfd,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(int)) == -1)
+    //set socket options
+    int optVal = 1;
+    if(setsockopt(*sockfd,SOL_SOCKET, SO_REUSEADDR,&optVal,sizeof(int)) == -1)
     {
-        perror("ERROR setting socket options\n");
+        perror("Failed to set socket options!\n");
         exit(1);
     }
+
+    //listen on socket
+    if(listen(*sockfd,5) == -1)
+    {
+        perror("Failed to listen on socket!\n");
+        exit(1);
+    }
+
+}
+
+int main(int argc, char *argv[]){
+
+    int sockfd = malloc(sizeof(int));
+    int port = 8888;
+    initialize_server(&sockfd,port);
+
 
 
     cmds[1].cmd_handler(1,2);
