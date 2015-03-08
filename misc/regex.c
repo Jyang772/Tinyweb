@@ -17,6 +17,7 @@ char msgbuf[100];
 //Current
 //Email verification via REGEX
 //reti = regcomp(&regex, "(\\+|-)?[[:digit:]]+",REG_EXTENDED);
+//reti = regcomp(&regex, "(^[0-9]{0,3}+\.+[0-9]{0,3}+\.[0-9]{0,3}+\.[0-9]{0,3}+)",REG_EXTENDED);
 reti = regcomp(&regex,"^([a-z0-9_\.-]+\@[\da-z\-]+\.[a-z\.]{2,6})$",REG_EXTENDED);
 if(reti){fprintf(stderr,"Could not compile regex!\n"); exit(1);}
 
